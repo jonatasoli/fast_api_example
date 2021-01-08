@@ -1,8 +1,7 @@
 from typing import Optional
 
 from fastapi import FastAPI
-from config import settings
-
+from dynaconf import settings
 
 app = FastAPI(
     title=settings.APP_NAME,
