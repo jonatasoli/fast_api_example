@@ -16,9 +16,9 @@ gunicorn = "^20.*"
 psycopg2-binary = "^2.*"
 alembic = "^1.*"
 sqlalchemy = "^1.*"
-gino= "*"
 requests = "^2.25.1"
 pep8 = "^1.7.1"
+gino = {version = "^1.0.1", extras = ["starlette"]}
 
 [tool.poetry.dev-dependencies]
 jedi = "*"

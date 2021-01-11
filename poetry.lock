@@ -223,6 +223,7 @@ python-versions = ">=3.5,<4.0"
 
 [package.dependencies]
 asyncpg = ">=0.18,<1.0"
+gino-starlette = {version = ">=0.1.1,<0.2.0", optional = true, markers = "python_version >= \"3.6\" and python_version < \"4.0\" and extra == \"starlette\""}
 SQLAlchemy = ">=1.2.16,<1.4"
 
 [package.extras]
@@ -231,6 +232,18 @@ aiohttp = ["gino-aiohttp (>=0.1.0,<0.2.0)"]
 tornado = ["gino-tornado (>=0.1.0,<0.2.0)"]
 sanic = ["gino-sanic (>=0.1.0,<0.2.0)"]
 quart = ["gino-quart (>=0.1.0,<0.2.0)"]
+
+[[package]]
+name = "gino-starlette"
+version = "0.1.1"
+description = "An extension for GINO to integrate with Starlette"
+category = "main"
+optional = false
+python-versions = ">=3.6,<4.0"
+
+[package.dependencies]
+gino = ">=1.0.0rc2,<2.0.0"
+starlette = ">=0.13.0,<0.14.0"
 
 [[package]]
 name = "greenlet"
@@ -1111,7 +1124,7 @@ python-versions = "*"
 [metadata]
 lock-version = "1.1"
 python-versions = "^3.9"
-content-hash = "ba5dc89a892d54fb5b01bfabd44c76f02022e8e104dc9c3f0adc36909566e5d7"
+content-hash = "34c3157f52689cd6368c033e4f3b3e149501dc3e963e0fca61fabb0e72da485b"
 
 [metadata.files]
 alembic = [
@@ -1264,6 +1277,10 @@ flake8-polyfill = [
 gino = [
     {file = "gino-1.0.1-py3-none-any.whl", hash = "sha256:56df57cfdefbaf897a7c4897c265a0e91a8cca80716fb64f7d3cf6d501fdfb3d"},
     {file = "gino-1.0.1.tar.gz", hash = "sha256:fe4189e82fe9d20c4a5f03fc775fb91c168061c5176b4c95623caeef22316150"},
+]
+gino-starlette = [
+    {file = "gino-starlette-0.1.1.tar.gz", hash = "sha256:a1afe419b34146449a502a5483085a60a75a46639534fff50510172b47c930fb"},
+    {file = "gino_starlette-0.1.1-py3-none-any.whl", hash = "sha256:de6ec87168097a52668359c842e9e3be4d339423c7805c615377975a1a19cb6c"},
 ]
 greenlet = [
     {file = "greenlet-0.4.17-cp27-cp27m-manylinux1_x86_64.whl", hash = "sha256:75e4c27188f28149b74e7685809f9227410fd15432a4438fc48627f518577fa5"},

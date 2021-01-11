@@ -1,9 +1,21 @@
 [default]
 API_V1_STR="/auth/v1"
 APP_NAME="Microservice Auth"
+DB_POOL_MIN_SIZE=1
+DB_POOL_MAX_SIZE=5
+DB_ECHO=false
+DB_SSL=false
+DB_USE_CONNECTION_FOR_REQUEST=false
+DB_RETRY_LIMIT=1000
+DB_RETRY_INTERVAL=100
+
 
 [development]
 APP_VERSION="1"
+DB_DSN = "postgresql://partyoudbuser:partyou123@localhost:5432/partyoudb"
+MAIN_APP ="example"
+API_V1_STR = "/todo"
+APP_NAME = "todo"
 
 [staging]
 APP_VERSION="1"

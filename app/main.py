@@ -3,21 +3,23 @@ from typing import Optional
 from fastapi import FastAPI
 from config import settings
 
-
-app = FastAPI(
-    title=settings.APP_NAME,
-    openapi_url=f"{settings.API_V1_STR}/openapi.json",
-    docs_url="/auth",
-    redoc_url=None
-)
+from ext.database import get_engine
+from todo import todo
 
 
-@app.get("/")
-def read_root():
-    return {"Hello": "World"}
+# app = FastAPI(
+#     title=settings.APP_NAME,
+#     openapi_url=f"{settings.MAIN_APP}/openapi.json",
+#     docs_url=f"/{settings.MAIN_APP}",
+#     redoc_url=None)
+app = FastAPI()
+app.mount("/todo", todo)
+db = get_engine()
+db.init_app(app)
 
-
-@app.get("/items/{item_id}")
-def read_item(item_id: int, q: Optional[str] = None):
-    return {"item_id": item_id, "q": q}
+# def get_app():
+#     app.mount('/todo', todo)
+#     db = get_engine()
+#     db.init_app(app)
+#     return app
 

@@ -110,14 +110,20 @@ def db_models(clean_db) -> Generator:
     TestingSessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=_engine)
     yield TestingSessionLocal()
 
+# @pytest.fixture(scope="session")
+# def client(clean_db, override_get_db) -> Generator:
+
+#     def _get_db_override():
+#         return override_get_db
+
+#     logger.info("-----GENERATE APP------")
+#     app.dependency_overrides[get_db] = _get_db_override
+#     logger.info(f"{ settings.current_env }")
+#     with TestClient(app) as c:
+#         yield c
+
 @pytest.fixture(scope="session")
-def client(clean_db, override_get_db) -> Generator:
+def client() -> Generator:
 
-    def _get_db_override():
-        return override_get_db
-
-    logger.info("-----GENERATE APP------")
-    app.dependency_overrides[get_db] = _get_db_override
-    logger.info(f"{ settings.current_env }")
     with TestClient(app) as c:
         yield c
