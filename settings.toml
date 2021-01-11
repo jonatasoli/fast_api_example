@@ -1,3 +1,0 @@
-[default]
-API_V1_STR="/auth/v1"
-APP_NAME="Microservice Auth"
