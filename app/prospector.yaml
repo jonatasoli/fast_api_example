@@ -1,0 +1,51 @@
+output-format: pylint
+
+strictness: medium
+test-warnings: true
+doc-warnings: false
+
+ignore-paths:
+  - docs
+  - migrations
+  - infra
+  - staticfiles
+  - uploads
+  - partyou_collect_statics
+  - partyou_error_handler
+  - microservice_connection
+  - contrib
+
+ignore-patterns:
+  - (^|/)skip(this)?(/|$)
+pep8:
+  disable:
+    - E223
+  options:
+    max-line-length: 230
+
+pyflakes:
+  run: true
+
+pylint:
+  run: true
+
+dodgy:
+  run: true
+
+mccabe:
+  run: true
+
+pyroma:
+  run: true
+
+vulture:
+  run: true
+
+frosted:
+  run: true
+
+mypy:
+  run: true
+
+bandit:
+  run: true

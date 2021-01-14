@@ -2,7 +2,7 @@ from config import settings
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
-from todo.api.api_v1.endpoints import todo_router 
+from todo.api.endpoints import todo_router
 
 
 todo = FastAPI(
@@ -25,6 +25,4 @@ todo.add_middleware(
     allow_headers=["*"],
 )
 
-todo.include_router(
-        todo_router,
-        responses={404: {"description": "Not found"}})
+todo.include_router(todo_router, responses={404: {"description": "Not found"}})

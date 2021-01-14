@@ -2,17 +2,20 @@ from typing import Dict, Generator
 from loguru import logger
 
 import pytest
-from fastapi.testclient import TestClient
+# from fastapi.testclient import TestClient
+from alembic.config import main
+from starlette.testclient import TestClient
+
 from sqlalchemy import create_engine
 from sqlalchemy.orm import Session, sessionmaker
 from sqlalchemy.engine import reflection
 from sqlalchemy.schema import (
-        MetaData,
-        Table,
-        DropTable,
-        ForeignKeyConstraint,
-        DropConstraint,
-        )
+    MetaData,
+    Table,
+    DropTable,
+    ForeignKeyConstraint,
+    DropConstraint,
+)
 
 import sys
 from os.path import dirname as d
@@ -23,9 +26,10 @@ print(f"ROOT {root_dir}")
 sys.path.append(root_dir)
 
 from ext.base import Base
+from ext.database import db
 from config import settings
-from ext.database import get_session
-from main import app
+# from ext.database import get_session
+from main import create_app as app
 from ext.database import get_engine
 
 
@@ -38,13 +42,15 @@ def set_test_settings():
 def clean_db():
     _engine = get_engine()
 
-    db_DropEverything()
-    Base.metadata.create_all(bind=_engine)
+    # db_DropEverything()
+    db.gino.drop_all(bind=_engine)
+    # Base.metadata.create_all(bind=_engine)
+    db.gino.create_all(bind=_engine)
 
 
 def db_DropEverything():
     _engine = get_engine()
-    conn=_engine.connect()
+    conn = _engine.connect()
 
     # the transaction only applies if the DB supports
     # transactional DDL, i.e. Postgresql, MS SQL Server
@@ -53,7 +59,7 @@ def db_DropEverything():
     inspector = reflection.Inspector.from_engine(_engine)
 
     # gather all data first before dropping anything.
-    # some DBs lock after things have been dropped in 
+    # some DBs lock after things have been dropped in
     # a transaction.
     metadata = MetaData()
 
@@ -63,12 +69,10 @@ def db_DropEverything():
     for table_name in inspector.get_table_names():
         fks = []
         for fk in inspector.get_foreign_keys(table_name):
-            if not fk['name']:
+            if not fk["name"]:
                 continue
-            fks.append(
-                ForeignKeyConstraint((),(),name=fk['name'])
-                )
-        t = Table(table_name,metadata,*fks)
+            fks.append(ForeignKeyConstraint((), (), name=fk["name"]))
+        t = Table(table_name, metadata, *fks)
         tbs.append(t)
         all_fks.extend(fks)
 
@@ -84,31 +88,38 @@ def db_DropEverything():
 @pytest.fixture(scope="session")
 def override_get_db():
     try:
-        _engine = get_engine()
-        logger.info(f"----- ADD DB {Base.metadata}-------")
-        TestingSessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=_engine)
-        db = TestingSessionLocal() 
+        # _engine = get_engine()
+        # logger.info(f"----- ADD DB {Base.metadata}-------")
+        # TestingSessionLocal = sessionmaker(
+        #     autocommit=False, autoflush=False, bind=_engine
+        # )
+        # db = TestingSessionLocal()
+
         yield db
     finally:
-        db.close()
+        db.pop_bind().close()
+        # db.close()
 
 
 @pytest.fixture(scope="session")
 def db() -> Generator:
-    _engine = get_engine()
-    logger.info("-----GENERATE DB------")
-    _engine = get_engine()
-    TestingSessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=_engine)
-    yield TestingSessionLocal()
+    # _engine = get_engine()
+    # logger.info("-----GENERATE DB------")
+    # _engine = get_engine()
+    # TestingSessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=_engine)
+    # yield TestingSessionLocal()
+    yield db
 
 
 @pytest.fixture(scope="session")
 def db_models(clean_db) -> Generator:
-    _engine = get_engine()
-    logger.info("-----GENERATE DB------")
-    _engine = get_engine()
-    TestingSessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=_engine)
-    yield TestingSessionLocal()
+    # _engine = get_engine()
+    # logger.info("-----GENERATE DB------")
+    # _engine = get_engine()
+    # TestingSessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=_engine)
+    # yield TestingSessionLocal()
+    yield db
+
 
 # @pytest.fixture(scope="session")
 # def client(clean_db, override_get_db) -> Generator:
@@ -122,8 +133,21 @@ def db_models(clean_db) -> Generator:
 #     with TestClient(app) as c:
 #         yield c
 
-@pytest.fixture(scope="session")
-def client() -> Generator:
 
-    with TestClient(app) as c:
-        yield c
+# @pytest.fixture(scope="session")
+# def client() -> Generator:
+
+#     with TestClient(app()) as c:
+#         yield c
+
+@pytest.fixture
+def client():
+    from main import create_app
+    from ext.database import db
+
+    main(["--raiseerr", "upgrade", "head"])
+
+    with TestClient(create_app()) as client:
+        yield client
+
+    main(["--raiseerr", "downgrade", "base"])
