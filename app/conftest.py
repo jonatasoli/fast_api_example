@@ -2,9 +2,8 @@ from typing import Dict, Generator
 from loguru import logger
 
 import pytest
-# from fastapi.testclient import TestClient
+from fastapi.testclient import TestClient
 from alembic.config import main
-from starlette.testclient import TestClient
 
 from sqlalchemy import create_engine
 from sqlalchemy.orm import Session, sessionmaker
@@ -26,9 +25,8 @@ print(f"ROOT {root_dir}")
 sys.path.append(root_dir)
 
 from ext.base import Base
-from ext.database import db
 from config import settings
-# from ext.database import get_session
+from ext.database import get_session
 from main import create_app as app
 from ext.database import get_engine
 
@@ -42,10 +40,8 @@ def set_test_settings():
 def clean_db():
     _engine = get_engine()
 
-    # db_DropEverything()
-    db.gino.drop_all(bind=_engine)
-    # Base.metadata.create_all(bind=_engine)
-    db.gino.create_all(bind=_engine)
+    db_DropEverything()
+    Base.metadata.create_all(bind=_engine)
 
 
 def db_DropEverything():
@@ -88,36 +84,33 @@ def db_DropEverything():
 @pytest.fixture(scope="session")
 def override_get_db():
     try:
-        # _engine = get_engine()
-        # logger.info(f"----- ADD DB {Base.metadata}-------")
-        # TestingSessionLocal = sessionmaker(
-        #     autocommit=False, autoflush=False, bind=_engine
-        # )
-        # db = TestingSessionLocal()
+        _engine = get_engine()
+        logger.info(f"----- ADD DB {Base.metadata}-------")
+        TestingSessionLocal = sessionmaker(
+            autocommit=False, autoflush=False, bind=_engine
+        )
+        db = TestingSessionLocal()
 
         yield db
     finally:
-        db.pop_bind().close()
-        # db.close()
+        db.close()
 
 
 @pytest.fixture(scope="session")
 def db() -> Generator:
-    # _engine = get_engine()
-    # logger.info("-----GENERATE DB------")
-    # _engine = get_engine()
-    # TestingSessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=_engine)
-    # yield TestingSessionLocal()
+    _engine = get_engine()
+    logger.info("-----GENERATE DB------")
+    TestingSessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=_engine)
+    yield TestingSessionLocal()
     yield db
 
 
 @pytest.fixture(scope="session")
 def db_models(clean_db) -> Generator:
-    # _engine = get_engine()
-    # logger.info("-----GENERATE DB------")
-    # _engine = get_engine()
-    # TestingSessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=_engine)
-    # yield TestingSessionLocal()
+    _engine = get_engine()
+    logger.info("-----GENERATE DB------")
+    TestingSessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=_engine)
+    yield TestingSessionLocal()
     yield db
 
 
@@ -142,12 +135,10 @@ def db_models(clean_db) -> Generator:
 
 @pytest.fixture
 def client():
-    from main import create_app
-    from ext.database import db
 
     main(["--raiseerr", "upgrade", "head"])
 
-    with TestClient(create_app()) as client:
+    with TestClient(app()) as client:
         yield client
 
     main(["--raiseerr", "downgrade", "base"])

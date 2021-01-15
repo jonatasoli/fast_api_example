@@ -1,7 +1,7 @@
 from pydantic import BaseModel
 
 
-class Task(BaseModel):
+class TaskInDB(BaseModel):
     name: str
     completed: bool
 
@@ -9,5 +9,8 @@ class Task(BaseModel):
         orm_mode = True
 
 
-class TaskResponse(Task):
+class TaskResponse(TaskInDB):
     id: int
+
+    class Config:
+        orm_mode = True
