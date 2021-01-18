@@ -2,25 +2,3 @@
 API_V1_STR="/main/v1"
 APP_NAME="Microservice Main"
 DEFAULT_TIMEZONE="America/Sao_Paulo"
-DB_POOL_MIN_SIZE=1
-DB_POOL_MAX_SIZE=5
-DB_ECHO=false
-DB_SSL=false
-DB_USE_CONNECTION_FOR_REQUEST=false
-DB_RETRY_LIMIT=1000
-DB_RETRY_INTERVAL=100
-
-
-[development]
-APP_VERSION="1"
-DB_DSN = "postgresql://partyoudbuser:partyou123@localhost:5432/test_todo"
-MAIN_APP ="example"
-API_V1_STR = "/todo"
-APP_NAME = "todo"
-
-[testing]
-DB_DSN = "postgresql://partyoudbuser:partyou123@localhost:5432/db_test"
-MAIN_APP ="example"
-API_V1_STR = "/todo"
-APP_NAME = "todo"
-

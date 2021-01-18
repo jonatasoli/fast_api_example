@@ -1,0 +1,13 @@
+[development]
+APP_VERSION="1"
+DB_DSN = "postgresql://partyoudbuser:partyou123@localhost:5432/test_todo"
+MAIN_APP ="example"
+API_V1_STR = "/todo"
+APP_NAME = "todo"
+
+[testing]
+DB_DSN = "postgresql://partyoudbuser:partyou123@localhost:5432/db_test"
+MAIN_APP ="example"
+API_V1_STR = "/todo"
+APP_NAME = "todo"
+
