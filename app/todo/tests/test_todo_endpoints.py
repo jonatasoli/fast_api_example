@@ -1,17 +1,40 @@
 import pytest
 from unittest import mock
-from todo.schemas.schemas_todo import TaskEndpoint
+from todo.schemas.schemas_todo import TaskEndpoint, TaskCreate, Validation
 from loguru import logger
+from fastapi import status
 
+
+def test_error_route(client):
+    response = client.get(
+        "/todo/error_route", headers={"Content-Type": "application/json"} 
+    )
+    response_data = response.json().get('detail')
+    assert response.status_code == status.HTTP_404_NOT_FOUND
+    assert response_data == 'Not Found'
+    
 
 def test_add_task(client):
-    data = TaskEndpoint(name="Task1", completed=False, current_user_id=1)
+    task = TaskCreate(name="Task1", completed=False)
+    validation = Validation(current_user_id=1)
+    data = TaskEndpoint(task=task, validation=validation)
     response = client.post(
         "/todo/add", headers={"Content-Type": "application/json"}, json=data.dict()
     )
-    logger.debug(f"------------ {response} ----------")
-    logger.debug(f"------------ {response.content} ----------")
-    assert response.status_code == 201
+    assert response.status_code == status.HTTP_201_CREATED
+    assert response.json() == {'name': 'Task1', 'completed': False, 'id': 1}
+
+def test_add_task_error_validate(client):
+    """Must be error on validate data"""
+    task = TaskCreate(name="Task1", completed=False)
+    response = client.post(
+        "/todo/add", headers={"Content-Type": "application/json"}, json=task.dict()
+    )
+    response_data = response.json().get('detail')[0]
+    assert response.status_code == status.HTTP_422_UNPROCESSABLE_ENTITY
+    assert response_data.get('msg') == 'field required'
+    assert response_data.get('type') == 'value_error.missing'
+    assert response_data.get('loc') == ['body', 'task']
 
 
 def test_list_tasks():

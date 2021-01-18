@@ -1,11 +1,15 @@
 from loguru import logger
-from todo.dao.dao_todo import task
+from todo.dao import task
 
 
 async def add_task(task_data):
-    name = task_data.name
-    name.join("Include")
-    task_data.name = name
+    try:
+        name = task_data.task.name
+        name.join("Include")
+        task_data.task.name = name
 
-    logger.info(task_data.name)
-    return await task.create(task_name=task_data, current_user_id=task_data.current_user_id)
+        logger.info(task_data.task.name)
+        return await task.create(obj_in=task_data.task)
+    except Exception as e:
+        logger.error(f"Error in add task {e}")
+        raise e

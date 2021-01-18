@@ -11,4 +11,8 @@ todo_router = APIRouter()
 
 @todo_router.post("/add", status_code=201)
 async def add_task(*, task_data: TaskEndpoint):
-    return await services_todo.add_task(task_data)
+    try:
+        return await services_todo.add_task(task_data)
+    except Exception as e:
+        logger.error(f"Error return endpoint {e}")
+        raise e

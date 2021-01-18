@@ -1,9 +1,11 @@
 from fastapi import Depends
 from fastapi.encoders import jsonable_encoder
 from sqlalchemy.ext.asyncio import AsyncSession
+from sqlalchemy.exc import DataError, DatabaseError, DisconnectionError, IntegrityError
+from loguru import logger
 
 from ..models.models_task import Task
-from ..schemas.schemas_todo import TaskResponse, TaskBase, TaskCreate, TaskUpdate
+from ..schemas.schemas_todo import TaskCreateResponse, TaskUpdateResponse, TaskBase, TaskCreate, TaskUpdate, Validation
 from .base import CRUDBase
 from ext.database import get_session
 
@@ -11,21 +13,48 @@ from ext.database import get_session
 class CRUDTask(CRUDBase[
     TaskBase,
     TaskCreate,
+    TaskCreateResponse,
     TaskUpdate,
+    TaskUpdateResponse,
 ]):
-    async def create(self, task_name: TaskCreate, current_user_id: int):
-
-        response = None
+    async def create(self, obj_in: TaskCreate):
+        db_data = super().create(obj_in)
         import pdb; pdb.set_trace()
+        return await TaskCreateResponse.from_orm(db_data)
+    # async def create(self, obj_in: TaskCreate, validation: Validation):
+    #     try:
 
-        task_db = self.obj_in_to_db_obj(obj_in=task_name.dict(exclude=current_user_id), requester=current_user_id)
-        async with get_session() as db:
-            # task_db = Task(**task_name.dict())
-            db.add(task_db)
-            await db.commit()
-            response = TaskResponse.from_orm(task_db)
+    #         response = None
 
-        return response
+    #         task_db = self.obj_in_to_db_obj(obj_in=task, requester=validation.current_user_id)
+    #         async with get_session() as db:
+    #             db.add(task_db)
+    #             await db.commit()
+    #             response = TaskCreateResponse.from_orm(task_db)
 
+    #         return response
+    #     except(DataError, DatabaseError, DisconnectionError, IntegrityError) as err:
+    #         logger.error(f"SQLAlchemy error {err}")
+    #     except Exception as e:
+    #         logger.error(f"Error in dao {e}")
+    #         raise e
 
-task = CRUDTask(Task)
+    async def update(self, task_model: Task, task_schema: TaskUpdate):
+        try:
+            return True
+        except(DataError, DatabaseError, DisconnectionError, IntegrityError) as err:
+            logger.error(f"SQLAlchemy error {err}")
+        except Exception as e:
+            logger.error(f"Error in dao {e}")
+            raise e
+
+    async def get(self, id):
+        try:
+            async with get_session() as db:
+                return db.query(self.model).get(id)
+
+        except(DataError, DatabaseError, DisconnectionError, IntegrityError) as err:
+            logger.error(f"SQLAlchemy error {err}")
+        except Exception as e:
+            logger.error(f"Error in dao {e}")
+            raise e

@@ -9,16 +9,29 @@ class TaskBase(BaseModel):
 class TaskCreate(TaskBase):
     ...
 
-class TaskUpdate(TaskBase):
-    ...
 
-
-class TaskResponse(TaskBase):
+class TaskCreateResponse(TaskBase):
     id: int
 
     class Config:
         orm_mode = True
 
 
-class TaskEndpoint(TaskBase):
+class TaskUpdate(TaskBase):
+    ...
+
+
+class TaskUpdateResponse(TaskBase):
+    id: int
+
+    class Config:
+        orm_mode = True
+
+
+class Validation(BaseModel):
     current_user_id: int
+
+
+class TaskEndpoint(BaseModel):
+    task: TaskCreate
+    validation: Validation
