@@ -28,10 +28,5 @@ class TaskUpdateResponse(TaskBase):
         orm_mode = True
 
 
-class Validation(BaseModel):
+class TaskEndpoint(TaskBase):
     current_user_id: int
-
-
-class TaskEndpoint(BaseModel):
-    task: TaskCreate
-    validation: Validation

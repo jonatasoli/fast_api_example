@@ -6,22 +6,25 @@ doc-warnings: false
 
 ignore-paths:
   - docs
+  - ext
   - migrations
-  - infra
+  - tests
   - staticfiles
   - uploads
-  - partyou_collect_statics
-  - partyou_error_handler
-  - microservice_connection
   - contrib
+  - schemas
+  - adapters
+  - scripts
+  - config.py
+  - alembic.ini
+  - __init__.py
+  - conftest.py
 
 ignore-patterns:
   - (^|/)skip(this)?(/|$)
 pep8:
-  disable:
-    - E223
   options:
-    max-line-length: 230
+    max-line-length: 160
 
 pyflakes:
   run: true
@@ -45,7 +48,9 @@ frosted:
   run: true
 
 mypy:
-  run: true
+  options:
+    ignore-missing-import: true
+  run: false
 
 bandit:
-  run: true
+  run: trug

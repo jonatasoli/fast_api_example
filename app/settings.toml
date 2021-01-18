@@ -1,6 +1,7 @@
 [default]
 API_V1_STR="/main/v1"
 APP_NAME="Microservice Main"
+DEFAULT_TIMEZONE="America/Sao_Paulo"
 DB_POOL_MIN_SIZE=1
 DB_POOL_MAX_SIZE=5
 DB_ECHO=false

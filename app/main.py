@@ -1,7 +1,4 @@
-from typing import Optional
-
 from fastapi import FastAPI
-from config import settings
 
 from todo import todo
 
