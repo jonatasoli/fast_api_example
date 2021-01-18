@@ -7,3 +7,8 @@ services ficam as regras de negócio
 dao ficam as queries
 models ficam os modelos de dados
 schemas ficam os schemas do pydantic
+
+## Code Format
+
+```
+$ brunette . --config=setup.cfg

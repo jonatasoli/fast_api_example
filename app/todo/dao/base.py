@@ -14,9 +14,7 @@ CreateSchemaType = TypeVar("CreateSchemaType", bound=BaseModel)
 UpdateSchemaType = TypeVar("UpdateSchemaType", bound=BaseModel)
 
 
-class CRUDBase(
-    Generic[ModelType, CreateSchemaType, UpdateSchemaType], metaclass=ABCMeta
-):
+class CRUDBase(Generic[ModelType, CreateSchemaType, UpdateSchemaType], metaclass=ABCMeta):
     def __init__(self, model: Type[ModelType]):
         """
         CRUD object with default methods to Create, Read, Update (CRU).
@@ -54,7 +52,5 @@ class CRUDBase(
             raise e
 
     @abstractmethod
-    async def update(
-        self, *, db_obj: ModelType, obj_in: Union[UpdateSchemaType, Dict[str, Any]]
-    ) -> ModelType:
+    async def update(self, *, db_obj: ModelType, obj_in: Union[UpdateSchemaType, Dict[str, Any]]) -> ModelType:
         raise NotImplementedError()
