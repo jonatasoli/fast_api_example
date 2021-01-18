@@ -1,11 +1,11 @@
 import pytest
 from unittest import mock
-from todo.schemas.schemas_todo import TaskInDB
+from todo.schemas.schemas_todo import TaskEndpoint
 from loguru import logger
 
 
 def test_add_task(client):
-    data = TaskInDB(name="Task1", completed=False)
+    data = TaskEndpoint(name="Task1", completed=False, current_user_id=1)
     response = client.post(
         "/todo/add", headers={"Content-Type": "application/json"}, json=data.dict()
     )

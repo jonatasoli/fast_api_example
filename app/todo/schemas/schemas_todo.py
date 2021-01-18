@@ -1,16 +1,24 @@
 from pydantic import BaseModel
 
 
-class TaskInDB(BaseModel):
+class TaskBase(BaseModel):
     name: str
     completed: bool
 
-    class Config:
-        orm_mode = True
+
+class TaskCreate(TaskBase):
+    ...
+
+class TaskUpdate(TaskBase):
+    ...
 
 
-class TaskResponse(TaskInDB):
+class TaskResponse(TaskBase):
     id: int
 
     class Config:
         orm_mode = True
+
+
+class TaskEndpoint(TaskBase):
+    current_user_id: int
