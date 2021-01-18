@@ -60,8 +60,9 @@ class CRUDBase(
             async with get_session() as db:
                 db.add(data_db)
                 await db.commit()
+                response = db.refresh(data_db)
 
-            return data_db
+            return response
         except(DataError, DatabaseError, DisconnectionError, IntegrityError) as err:
             logger.error(f"SQLAlchemy error {err}")
         except Exception as e:

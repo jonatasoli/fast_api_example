@@ -18,9 +18,8 @@ class CRUDTask(CRUDBase[
     TaskUpdateResponse,
 ]):
     async def create(self, obj_in: TaskCreate):
-        db_data = super().create(obj_in)
-        import pdb; pdb.set_trace()
-        return await TaskCreateResponse.from_orm(db_data)
+        db_data = await super().create(obj_in)
+        return TaskCreateResponse.from_orm(db_data)
     # async def create(self, obj_in: TaskCreate, validation: Validation):
     #     try:
 
