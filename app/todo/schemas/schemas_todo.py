@@ -28,5 +28,12 @@ class TaskUpdateResponse(TaskBase):
         orm_mode = True
 
 
+class TaskGetResponse(TaskBase):
+    id: int
+
+    class Config:
+        orm_mode = True
+
+
 class TaskEndpoint(TaskBase):
     current_user_id: int
