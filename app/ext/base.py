@@ -1,2 +1,2 @@
-from todo.models.models_task import *
+from todo.models.models_todo import *
 from .database import Base
