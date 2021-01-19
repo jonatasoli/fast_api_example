@@ -27,3 +27,12 @@ async def update_task(task_id, task_data):
     except Exception as e:
         logger.error(f"Error in add task {e}")
         raise e
+
+
+async def get_task(task_id):
+    try:
+        logger.info(task_id)
+        return await task.get(id=task_id)
+    except Exception as e:
+        logger.error(f"Error in add task {e}")
+        raise e

@@ -23,3 +23,12 @@ async def update_task(*, task_id: int, task_data: TaskEndpoint):
     except Exception as e:
         logger.error(f"Error return endpoint {e}")
         raise e
+
+
+@todo_router.get("/get/{task_id}", status_code=status.HTTP_200_OK)
+async def update_task(*, task_id: int):
+    try:
+        return await services_todo.get_task(task_id)
+    except Exception as e:
+        logger.error(f"Error return endpoint {e}")
+        raise e

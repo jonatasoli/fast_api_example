@@ -2,6 +2,7 @@ from .base import CRUDBase
 from ..schemas.schemas_todo import (
     TaskCreateResponse,
     TaskUpdateResponse,
+    TaskGetResponse,
     TaskBase,
     TaskCreate,
     TaskUpdate,
@@ -16,6 +17,6 @@ class CRUDTask(
     ]
 ):
     class Meta:
-        ResponseCreateType = TaskCreateResponse
-        ResponseUpdateType = TaskUpdateResponse
-        ResponseGetType = None
+        response_create_type = TaskCreateResponse
+        response_update_type = TaskUpdateResponse
+        response_get_type = TaskGetResponse
