@@ -15,7 +15,7 @@ def test_error_route(client):
 
 
 def add_task(client):
-    data = TaskEndpoint(name="Task1", completed=False, current_user_id=1)
+    data = TaskEndpoint(name="Task 1", completed=False, current_user_id=1)
     response = client.post(
         "/todo/add", headers=HEADERS, json=data.dict()
     )
@@ -25,12 +25,12 @@ def add_task(client):
 def test_add_task(client):
     response = add_task(client)
     assert response.status_code == status.HTTP_201_CREATED
-    assert response.json() == {"name": "Task1", "completed": False, "id": 1}
+    assert response.json() == {"name": "Task 1", "completed": False, "id": 1}
 
 
 def test_add_task_error_validate(client):
     """Must be error on validate data"""
-    task = {"name": "Task1", "completed": "false"}
+    task = {"name": "Task 1", "completed": "false"}
     response = client.post(
         "/todo/add", headers=HEADERS, json=task
     )
@@ -48,7 +48,7 @@ def test_get_task(client):
         f"/todo/get/{response.json()['id']}", headers=HEADERS
     )
     assert response.status_code == status.HTTP_200_OK
-    assert response.json() == {"name": "Task1", "completed": False, "id": 1}
+    assert response.json() == {"name": "Task 1", "completed": False, "id": 1}
 
 
 def test_list_tasks():

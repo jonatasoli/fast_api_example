@@ -1,5 +1,5 @@
 from .base import CRUDBase
-from ..schemas.schemas_todo import (
+from todo.schemas.schemas_todo import (
     TaskCreateResponse,
     TaskUpdateResponse,
     TaskGetResponse,
