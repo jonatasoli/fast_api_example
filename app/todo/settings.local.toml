@@ -1,12 +1,12 @@
 [development]
 APP_VERSION="1"
-DB_DSN = "postgresql://partyoudbuser:partyou123@localhost:5432/test_todo"
+DB_DSN = "postgresql+asyncpg://postgres_user:pass123@localhost:5432/todo"
 MAIN_APP ="example"
 API_V1_STR = "/todo"
 APP_NAME = "todo"
 
 [testing]
-DB_DSN = "postgresql://partyoudbuser:partyou123@localhost:5432/db_test"
+DB_DSN = "postgresql+asyncpg://postgres_user:pass123@localhost:5432/todo_test"
 MAIN_APP ="example"
 API_V1_STR = "/todo"
 APP_NAME = "todo"

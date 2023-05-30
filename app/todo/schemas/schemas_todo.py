@@ -33,7 +33,3 @@ class TaskGetResponse(TaskBase):
 
     class Config:
         orm_mode = True
-
-
-class TaskEndpoint(TaskBase):
-    current_user_id: int
